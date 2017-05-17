@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+<MsgArgs id="MsgArgs">
+	<heartBeatMsgArgs>heartBeat</heartBeatMsgArgs>
+	<heartPongMsgArgs>heartPong</heartPongMsgArgs>
+	<connectMsgArgs>connect</connectMsgArgs>
+</MsgArgs>
+<RedisAddress>127.0.0.1</RedisAddress>
+<RedisPort>6379</RedisPort>
+<ServerAddress>127.0.0.1</ServerAddress>
+<ServerPort>8580</ServerPort>
+<WorkQueues>queue:createChat,queue:sendEmail,queue:sendChat</WorkQueues>
+</config>

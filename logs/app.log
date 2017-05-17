@@ -1,0 +1,7 @@
+2017-05-13 at 18:07:03 CST INFO  com.Test.Testcase 29 testLog - hello WorldSat May 13 18:07:03 CST 2017
+2017-05-16 at 10:47:52 CST INFO  com.server.HeartBeatServerHandler 45 channelRead - /127.0.0.1:47448 Linked
+2017-05-16 at 10:51:53 CST INFO  com.server.Tools.LogUtils 14 QuitDealLog - /127.0.0.1:47448Quit
+2017-05-16 at 10:53:58 CST INFO  com.server.HeartBeatServerHandler 45 channelRead - /127.0.0.1:47468 Linked
+2017-05-16 at 10:56:31 CST INFO  com.server.Tools.LogUtils 14 QuitDealLog - /127.0.0.1:47468Quit
+2017-05-16 at 13:02:28 CST INFO  com.server.HeartBeatServerHandler 45 channelRead - /127.0.0.1:50230 Linked
+2017-05-16 at 13:03:43 CST INFO  com.server.Tools.LogUtils 14 QuitDealLog - /127.0.0.1:50230Quit
