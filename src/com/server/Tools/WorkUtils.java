@@ -56,13 +56,11 @@ public class WorkUtils {
 		RedisUtils.ReleaseConn(conn);
 	}
 	
-//    public static String createChat(String sender, Set<String> recipients) {  \浼犺繃鏉ョ殑搴旇鏄痡son 鐨勶紙ChatWork锛�
     public static String dealcreateChat(CreateChatWork createCWork) { 
         String chatId =null;
         return createChat(createCWork, chatId);
     }
 
-    //    private static  String createChat(String sender, Set<String> recipients, String chatId){
     private static  String createChat(CreateChatWork createCWork, String chatId){
     	Jedis conn=RedisUtils.getPoolConnection();
         if(null==chatId){
@@ -89,7 +87,6 @@ public class WorkUtils {
 		}
     }
 
-   // public static String sendMessage(String chatId, String sender, String message) {
     public static String dealsendChat(ChatWork Cwork) {
     	String chatId=null;
     		chatId=String.valueOf(Cwork.getChatId());
@@ -125,9 +122,6 @@ public class WorkUtils {
 		System.out.println(Ework);
 		fun();
 	}
-//	public static void dealsendChat(ChatWork Cwork){
-//		System.out.println(Cwork);
-//	}
 	
 	public static void fun(){
 		  List<ChatMessages> r1 = fetchPendingMessages("Barry");
@@ -147,7 +141,6 @@ public class WorkUtils {
 	}
 	
 	
-//	 public List<ChatMessages> fetchPendingMessages(Jedis conn, String recipient) {
 	 public static List<ChatMessages> fetchPendingMessages(String recipient) {
 		 Jedis conn=RedisUtils.getPoolConnection();
 	        Set<Tuple> seenSet = conn.zrangeWithScores("seen:" + recipient, 0, -1);
@@ -213,4 +206,41 @@ public class WorkUtils {
 	      	RedisUtils.ReleaseConn(conn);
 	        return chatMessages;
 	    }
+	 public static boolean dealjoinChat(String chatId,String user){
+		 boolean Done=false;
+		 Jedis conn=RedisUtils.getPoolConnection();
+		 if(!conn.exists("ids:"+chatId)){
+			 return false;
+		 }
+		 int messageId=Integer.parseInt(conn.get("ids:"+chatId));
+		 Transaction trans = conn.multi();
+		  trans.zadd("chat:" + chatId, messageId, user);
+          trans.zadd("seen:" + user, messageId, chatId);
+		 trans.exec();
+		 Done=true;
+		 RedisUtils.ReleaseConn(conn);
+		 return Done;
+	 }
+	 public static boolean dealleaveChat(String chatId,String user){
+		 boolean Done=false;
+		 Jedis conn=RedisUtils.getPoolConnection();
+		 if(!conn.exists("chat:"+chatId)){
+			 return false;
+		 }
+		 Transaction trans = conn.multi();
+		 trans.zrem("chat:"+chatId, user);
+		 trans.zrem("seen:"+user, chatId);
+		 trans.zcard("chat:"+chatId);
+		 List<Object> res=trans.exec();
+		 if((int)res.get(res.size()-1)==0){
+			 trans= conn.multi();
+			 trans.del("msgs:"+chatId,"ids:"+chatId);
+			 trans.exec();
+		 }else {
+			Set<Tuple> oldest=conn.zrangeWithScores("chat:"+chatId, 0, 0);
+			conn.zremrangeByScore("chat:"+chatId, 0, oldest.iterator().next().getScore());
+		 }
+		 Done=true;
+		 return Done;
+	 }
 }
